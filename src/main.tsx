@@ -1,14 +1,23 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './components/App/App';
-import 'modern-normalize/modern-normalize.css';
-// import '../src/components/App/App.module.css';
 import { Toaster } from 'react-hot-toast';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import 'modern-normalize/modern-normalize.css';
 
-const root = createRoot(document.getElementById('root')!);
+const container = document.getElementById('root');
+if (!container) throw new Error('Root element not found.');
+
+const root = createRoot(container);
+
+// Ініціалізуємо клієнт React Query
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <App />
-    <Toaster position="top-right" />
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <Toaster position="top-right" reverseOrder={false} />
+    </QueryClientProvider>
   </React.StrictMode>
 );

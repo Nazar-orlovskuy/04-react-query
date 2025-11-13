@@ -18,26 +18,23 @@ const axiosInstance = axios.create({
   },
 });
 
-interface FetchMoviesParams {
+export interface FetchMoviesParams {
   query: string;
   page?: number;
   include_adult?: boolean;
 }
 
-interface TMDBSearchResponse {
+export interface TMDBSearchResponse {
   page: number;
   results: Movie[];
   total_pages: number;
   total_results: number;
 }
 
-/**
- * Пошук фільмів через TMDB API.
- * Повертає лише дані з results.
- */
+
 export async function fetchMovies(
   params: FetchMoviesParams
-): Promise<Movie[]> {
+): Promise<TMDBSearchResponse> {
   const response = await axiosInstance.get<TMDBSearchResponse>('/search/movie', {
     params: {
       query: params.query,
@@ -46,12 +43,9 @@ export async function fetchMovies(
     },
   });
 
-  return response.data.results;
+  return response.data;
 }
 
-/**
- * Створює повний шлях до зображення TMDB.
- */
 export function makeImagePath(
   path: string | null,
   size: 'w500' | 'original' = 'w500'
